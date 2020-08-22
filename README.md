@@ -30,3 +30,5 @@ The list:
 | China Southern Airlines | China               | airlines     |
 | All Nippon Airways      | Japan               | airlines     |
 | China Eastern Airlines  | China               | airlines     |
+
+For launching file with the main research it is required to open file `research.md` as Notebook.
