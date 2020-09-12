@@ -13,10 +13,44 @@ from scipy.signal import find_peaks
 
 import plotly.graph_objects as go
 import plotly.express as px
+
+import requests
 ```
 
 ```python
 path_2_data = r'./data'
+```
+
+```python
+BASE_YAHOO_DATETIME = datetime.date(year=1970, month=1, day=1)
+HISTORY_START_DATETIME = datetime.date(year=2015, month=1, day=1)
+```
+
+```python
+YAHOO_TICKERS = \
+    {'boeing': 'BA',
+     'airbus': 'AIR.PA',
+     'lockheed_martin': 'LMT',
+     'northrop_grumman': 'NOC',
+     'raytheon_technologies': 'RTX',
+     'safran': 'SAF.PA',
+     'rolls-royce': 'RR.L',
+     'leonardo': 'LDO.MI',
+     'bae_systems': 'BA.L',
+     'delta_air_lines': 'DAL',
+     'american_airlines_group': 'AAL',
+     'lufthansa': 'LHA.DE',
+     'united_airlines': 'UAL',
+     'air_france': 'AF.PA',
+     'iag': 'IAG.L',
+     'southwest': 'LUV',
+     'china_southern_airlines': '1055.HK',
+     'all_nippon_airways': '9202.T',
+     'china_eastern_airlines': '0670.HK'}
+```
+
+```python
+YAHOO_URL = 'https://query1.finance.yahoo.com/v7/finance/download/{TICKER}?period1={END}&period2={START}&interval=1d&events=history'
 ```
 
 ```python
@@ -57,11 +91,30 @@ EXPECTED_PROFIT = 'expected_money_profit'
 EXPECTED_RISK_PROFIT = 'expected_risk_money_profit'
 ```
 
+get data
+
+```python
+start_url = int((datetime.datetime.now().date() - BASE_YAHOO_DATETIME).total_seconds())
+end_url = int((HISTORY_START_DATETIME - BASE_YAHOO_DATETIME).total_seconds())
+```
+
+```python
+for company_name, ticker in YAHOO_TICKERS.items():
+    request_url = YAHOO_URL.format(TICKER=ticker, START=start_url, END=end_url)
+    response = requests.get(request_url, allow_redirects=True)
+    
+    with open(os.path.join(path_2_data, f'{company_name}.csv'), 'wb') as ticker_data_file:
+        ticker_data_file.write(response.content)
+```
+
 plot
 
 ```python
 dfs_tickers = []
 for ticker_file_name in os.listdir(path_2_data):
+    if ticker_file_name[0] == '.':
+        continue
+    
     df_ticker = pd.read_csv(os.path.join(path_2_data, ticker_file_name))
     df_ticker[TICKER_COLUMN_NAME] = ticker_file_name[:-4]
     dfs_tickers.append(df_ticker)
