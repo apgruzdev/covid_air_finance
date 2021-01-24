@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pandas = "*"
+plotly = "*"
+ipykernel = "*"
+lxml = "*"
+nbformat = "*"
+ipywidgets = "*"
+notebook = "*"
+sklearn = "*"
+requests = "*"
+
+[requires]
+python_version = "3.8"
